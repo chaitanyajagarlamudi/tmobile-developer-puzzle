@@ -23,13 +23,12 @@
       <mat-option
         *ngFor="let timePeriod of timePeriods"
         [value]="timePeriod.value"
+        (click)="fetchQuote()"
       >
         {{ timePeriod.viewValue }}
       </mat-option>
     </mat-select>
   </mat-form-field>
-
-  <button (click)="fetchQuote()" mat-raised-button>Go</button>
 </form>
 
 <coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>
