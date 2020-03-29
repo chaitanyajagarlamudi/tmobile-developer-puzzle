@@ -34,6 +34,9 @@ export class ChartComponent implements OnInit {
       options: { title: `Stock price`, width: '600', height: '400' }
     };
 
-    this.data$.subscribe(newData => (this.chartData = newData));
+    this.data$.subscribe(newData => {
+      console.log('=========', newData)
+      this.chartData = newData
+    });
   }
 }
