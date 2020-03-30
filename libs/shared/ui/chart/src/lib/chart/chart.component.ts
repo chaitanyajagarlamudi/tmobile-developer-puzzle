@@ -35,7 +35,6 @@ export class ChartComponent implements OnInit {
     };
 
     this.data$.subscribe(newData => {
-      console.log('=========', newData)
       this.chartData = newData
     });
   }

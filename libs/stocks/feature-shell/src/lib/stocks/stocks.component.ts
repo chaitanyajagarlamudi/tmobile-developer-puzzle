@@ -1,16 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-query';
+
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+
+import * as _moment from 'moment';
+import {default as _rollupMoment} from 'moment';
+
+const moment = _rollupMoment || _moment;
 
 @Component({
   selector: 'coding-challenge-stocks',
   templateUrl: './stocks.component.html',
-  styleUrls: ['./stocks.component.css']
+  styleUrls: ['./stocks.component.css'],
+  providers: [
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+  ],
 })
 export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
   symbol: string;
   period: string;
+  fromDate: string ='';
+  toDate: string ='';
 
   quotes$ = this.priceQuery.priceQueries$;
 
@@ -28,12 +42,31 @@ export class StocksComponent implements OnInit {
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
     this.stockPickerForm = fb.group({
       symbol: [null, Validators.required],
-      period: [null, Validators.required]
+      period: [null, Validators.required],
+      fromDate: new FormControl(),
+      toDate: new FormControl()
     });
   }
 
   ngOnInit() {
     
+  }
+
+  fromdatePickerEvent(event){
+    this.fromDate = moment(event.value).format('YYYY-MM-DD')
+    if(this.stockPickerForm.valid && this.fromDate && this.toDate){
+      console.log("From =", this.fromDate,  ' To=', this.toDate);
+      this.fetchQuote();
+    }
+  }
+
+  todatePickerEvent(event){
+    this.toDate = moment(event.value).format('YYYY-MM-DD');
+
+    if(this.stockPickerForm.valid && this.fromDate && this.toDate){
+      console.log("From =", this.fromDate,  ' To=', this.toDate);
+      this.fetchQuote();
+    }
   }
 
   fetchQuote() {
