@@ -29,7 +29,17 @@
     </mat-select>
   </mat-form-field>
 
-  <button (click)="fetchQuote()" mat-raised-button>Go</button>
+  <mat-form-field>
+    <input matInput [matDatepicker]="dp" placeholder="From" formControlName="fromDate" (dateChange)="fromdatePickerEvent($event)"> 
+    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="dp1" placeholder="To" formControlName="toDate" (dateChange)="todatePickerEvent($event)"> 
+    <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+    <mat-datepicker #dp1></mat-datepicker>
+  </mat-form-field>
 </form>
 
 <coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>
